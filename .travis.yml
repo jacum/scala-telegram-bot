@@ -12,5 +12,4 @@ before_script:
   - docker login --username ${DOCKER_USER} --password "${DOCKER_PASSWORD}"
 
 script:
-  - sbt compile
-  - sbt docker:publish
+  - sbt compile docker:publish
