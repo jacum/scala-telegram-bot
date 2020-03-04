@@ -9,9 +9,7 @@ scala:
    - 2.13.1
 
 before_script:
-  - set
-  - echo "${DOCKER_PASSWORD}"
-  - echo "${DOCKER_PASSWORD}" | docker login --username ${DOCKER_USER} --password-stdin
+  - docker login --username ${DOCKER_USER} --password "${DOCKER_PASSWORD}"
 
 script:
   - sbt compile
