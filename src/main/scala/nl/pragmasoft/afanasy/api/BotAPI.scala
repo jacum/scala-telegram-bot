@@ -4,8 +4,9 @@ import cats.effect.{Effect, Sync}
 import cats.implicits._
 import fs2.Stream
 import io.circe.generic.auto._
-import nl.pragmasoft.afanasy.{BotConfiguration, Logging}
+import nl.pragmasoft.afanasy.BotConfiguration
 import nl.pragmasoft.afanasy.api.dto.{BotResponse, BotUpdate}
+import nl.pragmasoft.afanasy.service.Logger
 import org.http4s.circe.jsonOf
 import org.http4s.client.Client
 import org.http4s.implicits._
@@ -20,11 +21,11 @@ trait StreamingBotAPI[F[_]] extends BotAPI[F, Stream[F, *]]
 
 class Http4SBotAPI[F[_]](
   config: BotConfiguration,
-  client: Client[F])(implicit F: Sync[F]) extends StreamingBotAPI[F] with Logging {
+  client: Client[F])(implicit F: Sync[F]) extends StreamingBotAPI[F] with Logger {
 
   implicit val decoder: EntityDecoder[F, BotResponse[List[BotUpdate]]] = jsonOf[F, BotResponse[List[BotUpdate]]]
 
-  private val botApiUri: Uri = uri"""https://api.telegram.org""" / s"bot${config.token}"
+  private val botApiUri: Uri = uri"""https://api.telegram.org""" / s"bot${config.`telegram-token`}"
 
   def send(chatId: ChatId, message: String): F[Unit] = {
 
@@ -56,7 +57,7 @@ class Http4SBotAPI[F[_]](
         (lastOffset(response).getOrElse(offset), response))
       .recoverWith {
         case ex =>
-          logger.error(ex)("Failed to poll updates")
+          log.error("Failed to poll updates", ex)
           F.delay(offset -> BotResponse(ok = true, Nil))
       }
   }

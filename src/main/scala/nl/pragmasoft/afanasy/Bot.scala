@@ -55,7 +55,7 @@ class Bot[F[_] : ConcurrentEffect : Async : Timer](config: BotConfiguration, api
 
     case Unknown(chatId, word) =>
       for {
-        result <- searchClient.search(word, config.geonamesUser)
+        result <- searchClient.search(word, config.`geonames-user-id`)
         maybePlace = result.fold(_.geonames.headOption).map(item =>
           GeoPoint(item.geonameId, item.toponymName, BigDecimal(item.lat), BigDecimal(item.lng))
         )

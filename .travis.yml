@@ -1,6 +1,16 @@
 language: scala
 
+services:
+  - docker
+
 jdk: openjdk11
 
 scala:
    - 2.13.1
+
+before_script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+
+script:
+  - sbt compile
+  - sbt docker:publish
