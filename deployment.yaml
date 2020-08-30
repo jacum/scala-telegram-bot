@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-bnlsusanin
+  labels:
+    app: bot-bnlsusanin
+    version: APP_VERSION
+spec:
+  selector:
+    matchLabels:
+      app: bot-bnlsusanin
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: bot-bnlsusanin
+        version: APP_VERSION
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - hetzner04.jacum.com
+      containers:
+        - name: app
+          imagePullPolicy: Always
+          image: eblovich/bnlsusanin-bot:APP_VERSION
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1005
+          env:
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: bnlsusanin-secrets
+                  key: TELEGRAM_TOKEN
+            - name: GEONAMES_USER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: bnlsusanin-secrets
+                  key: GEONAMES_USER_ID

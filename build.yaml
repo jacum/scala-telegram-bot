@@ -1,0 +1,41 @@
+name: v_$(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - master
+
+pool: 'hetzner03'
+
+variables:
+  - group: secrets-rassvet
+
+steps:
+  - task: Bash@3
+    displayName: Show kubernetes stats
+    inputs:
+      targetType: 'inline'
+      script: |
+        kubectl cluster-info
+
+  - task: Docker@2
+    displayName: Build an image
+    inputs:
+      workingDirectory: $(Build.SourcesDirectory)
+      repository: eblovich/bnlsusanin-bot
+      command: buildAndPush
+      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+      tags: $(Build.BuildNumber)
+
+  - task: Bash@3
+    displayName: Deploy site
+    inputs:
+      workingDirectory: $(Build.SourcesDirectory)
+      targetType: 'inline'
+      script: |
+        set
+        # cat config.yml | envsubst | kubectl apply -f -
+        cat deployment.yml | sed "s#APP_VERSION#$(Build.BuildNumber)#g" | kubectl apply -f -
+#    env:
+#      DATABASE_PASSWORD: $(TELEGRAM_TOKEN)
+#      MINIO_SECRET_KEY: $(GEONAMES_USER_ID)
