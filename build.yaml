@@ -39,7 +39,7 @@ steps:
       script: |
         set
         # cat config.yml | envsubst | kubectl apply -f -
-        cat deployment.yml | sed "s#APP_VERSION#$(Build.BuildNumber)#g" | kubectl apply -f -
+        cat deployment.yaml | sed "s#APP_VERSION#$(Build.BuildNumber)#g" | kubectl apply -f -
 #    env:
 #      DATABASE_PASSWORD: $(TELEGRAM_TOKEN)
 #      MINIO_SECRET_KEY: $(GEONAMES_USER_ID)
