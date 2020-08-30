@@ -15,13 +15,20 @@ steps:
       script: |
         kubectl cluster-info
 
+  - task: Bash@2
+    displayName: Build an image
+    inputs:
+      targetType: 'inline'
+      script: |
+        docker run -i -t --rm -v $(Build.SourcesDirectory):/root hseeberger/scala-sbt:graalvm-ce-20.0.0-java11_1.3.13_2.13.3 sbt compile docker:stage
+
   - task: Docker@2
     displayName: Build an image
     inputs:
       workingDirectory: $(Build.SourcesDirectory)
       repository: eblovich/bnlsusanin-bot
       command: buildAndPush
-      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+      dockerfile: '$(Build.SourcesDirectory)/target/docker/Dockerfile'
       tags: $(Build.BuildNumber)
 
   - task: Bash@3

@@ -13,7 +13,6 @@ resolvers += Resolver.sbtPluginRepo("releases")
 
 lazy val root =
   (project in file("."))
-
   .enablePlugins(GuardrailPlugin)
   .enablePlugins(WartRemover)
   .enablePlugins(JavaAppPackaging, DockerPlugin)
@@ -26,9 +25,9 @@ lazy val root =
     dockerBaseImage := "openjdk:11",
     dockerUpdateLatest := true,
     dockerExposedPorts ++= Seq(8080),
-    packageName in Docker := "afanasy",
+    packageName in Docker := "bnlsusanin-bot",
     version in Docker := version.value,
-    dockerRepository := Some("pragmasoftnl"),
+    dockerRepository := Some("eblovich"),
     mainClass in Compile := Some("nl.pragmasoft.afanasy.service.Main"),
     guardrailTasks in Compile := List(
       ScalaClient(
