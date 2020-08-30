@@ -20,7 +20,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        docker run -i --log-driver=none -a stdin -a stdout -a stderr -v $(Build.SourcesDirectory):/root --rm hseeberger/scala-sbt:graalvm-ce-20.0.0-java11_1.3.13_2.13.3 sbt -Divy.home=/cache/.ivy2 -Dsbt.ivy.home=/cache/.ivy2 -Dcoursier.cache=/cache/coursier compile docker:stage
+        docker run -i --log-driver=none -a stdin -a stdout -a stderr -v $(Build.SourcesDirectory):/root: -v /data/cache/agent:/cache --rm hseeberger/scala-sbt:graalvm-ce-20.0.0-java11_1.3.13_2.13.3 sbt -Divy.home=/cache/.ivy2 -Dsbt.ivy.home=/cache/.ivy2 -Dcoursier.cache=/cache/coursier compile docker:stage
 
   - task: Docker@2
     displayName: Build the image
