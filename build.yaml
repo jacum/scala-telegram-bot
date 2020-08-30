@@ -7,9 +7,6 @@ trigger:
 
 pool: 'hetzner03'
 
-variables:
-  - group: secrets-rassvet
-
 steps:
   - task: Bash@3
     displayName: Show kubernetes stats
