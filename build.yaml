@@ -28,7 +28,7 @@ steps:
       workingDirectory: $(Build.SourcesDirectory)
       repository: eblovich/bnlsusanin-bot
       command: buildAndPush
-      dockerfile: '$(Build.SourcesDirectory)/target/docker/Dockerfile'
+      dockerfile: '$(Build.SourcesDirectory)/target/docker/stage/Dockerfile'
       tags: $(Build.BuildNumber)
 
   - task: Bash@3
