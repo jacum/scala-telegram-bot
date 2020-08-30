@@ -20,7 +20,7 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        docker run -i -t -v $(Build.SourcesDirectory):/root --rm hseeberger/scala-sbt:graalvm-ce-20.0.0-java11_1.3.13_2.13.3 sbt -Divy.home=data/cache/agent/.ivy2 -Dsbt.ivy.home=/data/cache/agent/.ivy2 compile docker:stage
+        echo "docker run -i -t -v $(Build.SourcesDirectory):/root --rm hseeberger/scala-sbt:graalvm-ce-20.0.0-java11_1.3.13_2.13.3 sbt -Divy.home=data/cache/agent/.ivy2 -Dsbt.ivy.home=/data/cache/agent/.ivy2 compile docker:stage"
 
   - task: Docker@2
     displayName: Build the image
